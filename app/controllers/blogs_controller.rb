@@ -6,7 +6,12 @@ class BlogsController < ApplicationController
   before_action :set_blog, only: %i[show edit update destroy]
 
   def index
-    @blogs = Blog.search(params[:term]).published.default_order
+    @blogs = if params[:term].present?
+               sanitized_term = ActiveRecord::Base.sanitize_sql_like(params[:term])
+               Blog.where('title LIKE ?', "%#{sanitized_term}%").published.default_order
+             else
+               Blog.published.default_order
+             end
   end
 
   def show; end
