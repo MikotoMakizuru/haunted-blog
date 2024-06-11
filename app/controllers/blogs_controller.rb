@@ -5,6 +5,7 @@ class BlogsController < ApplicationController
 
   before_action :set_blog, only: %i[show edit update destroy]
   before_action :authorize_user!, only: %i[edit update destroy]
+  before_action :browsable_user!, only: %i[show]
 
   def index
     @blogs = if params[:term].present?
@@ -55,6 +56,10 @@ class BlogsController < ApplicationController
 
   def authorize_user!
     raise ActiveRecord::RecordNotFound unless @blog.user == current_user
+  end
+
+  def browsable_user!
+    raise ActiveRecord::RecordNotFound if @blog.secret? && @blog.user != current_user
   end
 
   def blog_params
