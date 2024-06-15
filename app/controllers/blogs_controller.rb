@@ -55,7 +55,7 @@ class BlogsController < ApplicationController
   end
 
   def authorize_user!
-    raise ActiveRecord::RecordNotFound unless @blog.user == current_user
+    current_user.blogs.find(params[:id]) unless @blog.user == current_user
   end
 
   def browsable_user!
