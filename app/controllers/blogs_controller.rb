@@ -9,8 +9,7 @@ class BlogsController < ApplicationController
 
   def index
     @blogs = if params[:term].present?
-               sanitized_term = ActiveRecord::Base.sanitize_sql_like(params[:term])
-               Blog.where('title LIKE ?', "%#{sanitized_term}%").published.default_order
+               Blog.published.search(params[:term]).default_order
              else
                Blog.published.default_order
              end
