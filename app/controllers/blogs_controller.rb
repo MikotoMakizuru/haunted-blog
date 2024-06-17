@@ -54,7 +54,7 @@ class BlogsController < ApplicationController
   end
 
   def browsable_user!
-    raise ActiveRecord::RecordNotFound if @blog.secret? && @blog.user != current_user
+    Blog.find(0) if @blog.secret? && @blog.user != current_user
   end
 
   def blog_params
