@@ -8,11 +8,7 @@ class BlogsController < ApplicationController
   before_action :browsable_user!, only: %i[show]
 
   def index
-    @blogs = if params[:term].present?
-               Blog.published.search(params[:term]).default_order
-             else
-               Blog.published.default_order
-             end
+    @blogs = Blog.search(params[:term]).published.default_order
   end
 
   def show; end
