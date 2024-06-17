@@ -62,18 +62,10 @@ class BlogsController < ApplicationController
   end
 
   def blog_params
-    appropriate_update(params)
-  end
-
-  def appropriate_update(params)
-    params.require(:blog).permit(:title, :content, :secret, :random_eyecatch).tap do |permitted_params|
-      unless current_user.premium?
-        if params[:action] == 'update'
-          permitted_params[:random_eyecatch] = @blog.random_eyecatch
-        elsif permitted_params[:random_eyecatch] == '1'
-          permitted_params[:random_eyecatch] = '0'
-        end
-      end
+    if current_user.premium?
+      params.require(:blog).permit(:title, :content, :secret, :random_eyecatch)
+    else
+      params.require(:blog).permit(:title, :content, :secret)
     end
   end
 end
