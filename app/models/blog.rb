@@ -14,8 +14,6 @@ class Blog < ApplicationRecord
       sanitized_term = ActiveRecord::Base.sanitize_sql_like(term)
       where('title LIKE ? OR content LIKE ?', "%#{sanitized_term}%", "%#{sanitized_term}%")
     end
-    # sanitized_term = ActiveRecord::Base.sanitize_sql_like(term)
-    # where('title LIKE ? OR content LIKE ?', "%#{sanitized_term}%", "%#{sanitized_term}%")
   }
 
   scope :default_order, -> { order(id: :desc) }
