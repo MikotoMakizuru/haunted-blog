@@ -3,8 +3,9 @@
 class BlogsController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[index show]
 
-  before_action :set_blog, only: %i[edit update destroy]
-  before_action :authorize_user!, only: %i[edit update destroy]
+  before_action :set_blog, only: %i[show]
+
+  before_action :set_authenticated_user_blog, only: %i[edit update destroy]
 
   def index
     @blogs = Blog.search(params[:term]).published.default_order
@@ -50,8 +51,8 @@ class BlogsController < ApplicationController
     @blog = Blog.find(params[:id])
   end
 
-  def authorize_user!
-    current_user.blogs.find(params[:id]) unless @blog.user == current_user
+  def set_authenticated_user_blog
+    @blog = current_user.blogs.find(params[:id])
   end
 
   def blog_params
