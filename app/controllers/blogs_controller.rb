@@ -11,9 +11,7 @@ class BlogsController < ApplicationController
     @blogs = Blog.search(params[:term]).published.default_order
   end
 
-  def show
-    @blog = Blog.authorized(current_user).find(params[:id])
-  end
+  def show; end
 
   def new
     @blog = Blog.new
@@ -48,7 +46,7 @@ class BlogsController < ApplicationController
   private
 
   def set_blog
-    @blog = Blog.find(params[:id])
+    @blog = user_signed_in? ? Blog.authorized(current_user).find(params[:id]) : Blog.published.find(params[:id])
   end
 
   def set_authenticated_user_blog
