@@ -46,7 +46,7 @@ class BlogsController < ApplicationController
   private
 
   def set_blog
-    @blog = user_signed_in? ? Blog.authorized(current_user).find(params[:id]) : Blog.published.find(params[:id])
+    @blog = user_signed_in? ? Blog.accessible_by(current_user).find(params[:id]) : Blog.published.find(params[:id])
   end
 
   def set_current_user_blog
